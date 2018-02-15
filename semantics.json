@@ -1,0 +1,9 @@
+[ 
+  {
+    "label": "",
+    "name": "data",
+    "type": "text",
+    "optional": true,
+    "widget": "math_eval_editor"
+  }
+]

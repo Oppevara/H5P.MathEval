@@ -1,0 +1,23 @@
+{
+  "title": "Math Eval",
+  "majorVersion": 1,
+  "minorVersion": 0,
+  "patchVersion": 1,
+  "runnable": 1,
+  "author": "Karli Raudsepp",
+  "machineName": "H5P.MathEval",
+  "preloadedDependencies": [
+    { "machineName" : "H5P.KarliLibrary", "majorVersion" : 1, "minorVersion" : 0 }
+  ],
+  "preloadedJs": [
+    { "path": "port_eval.js" },
+    { "path": "math_eval_wrapper.js" },
+    { "path": "h5p.js" }
+  ],
+  "preloadedCss": [
+  ],
+  "editorDependencies": [ 
+    { "machineName": "H5PEditor.MathEvalEditor", "majorVersion": 1, "minorVersion": 0 } 
+  ] 
+
+}
