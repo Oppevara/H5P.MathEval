@@ -1,90 +1,101 @@
 
+var mjdyna = build("script");
+mjdyna.src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML";
+document.body.appendChild(mjdyna);
+
 function math_eval_wrapper(mode) {
-	this.el = build("div");
+	this.el = build("div", "math_eval_wrapper");
+	this.el_exercises = build("div", "exercises", this.el);
 	this.mode = mode || "editor";
 
-	this.openEditor = function openEditor(textareaID) {
-		var equation = document.querySelector("#" + textareaID).value;
 
-		var vme_url = "";
-		if (window.location.hostname == "localhost") {
-			vme_url = "http://localhost:8888/geo5p/sites/all/modules/x_ck_math/ck_vme/VisualMathEditor/VisualMathEditor.html?runLocal";
-		} else {
-			vme_url = "/oppevara/sites/all/modules/x_ck_math/ck_vme/VisualMathEditor/VisualMathEditor.html?runLocal";
-		}
-		if (equation.length > 0) {
+	//	initialize VME
+	(function(){
+		var drupal = window.Drupal || window.parent.Drupal;
+		var vme_frame = build("iframe");
+		vme_frame.style = "width:100%;height:100%";
+		vme_frame.src = drupal.settings.basePath + "sites/all/modules/x_ck_math/ck_vme/VisualMathEditor/VisualMathEditor.html?runLocal";
+		this.vme_floater = new floater(vme_frame, "Visual Math Editor", undefined, undefined, 800, 600);
+
+		this.vme_callback = undefined;
+
+		this.show_vme = function(equation, callback) {
+			this.vme_callback = callback;
+			this.vme_floater.show();
+			this.vme_floater.center();
+			equation = equation || "";
+
 			var ltx_start = equation.indexOf("\\(");
 			var ltx_end = equation.indexOf("\\)");
-			if (ltx_start !== -1 && ltx_end !== -1) {
-				//	is latex
-				equation = equation.substring(ltx_start + 2, ltx_end);
-			}
-			vme_url += "&equation=" + equation;
-		}
+			if (ltx_start !== -1 && ltx_end !== -1) equation = equation.substring(ltx_start + 2, ltx_end);
+			vme_frame.contentWindow.vme.codeMirrorEditor.setValue(equation);
+		}.bind(this);
 
-		var ifr = build("iframe");
-		ifr.style.width = "100%";
-		ifr.style.height = "100%";
-		ifr.src=vme_url;
-		var f = new floater(ifr, "Visual Math Editor", undefined, undefined, 800, 600);
-		f.add_button("ok", function() {
-			var cont = ifr.contentWindow.document.querySelector(".CodeMirror-lines");
-			var conts = cont.querySelectorAll("pre");
-			var latex = "";
-			for (var i = 0; i < conts.length; i++) {
-				latex += conts[i].innerText;
-			}
-			f.remove();
-			document.querySelector("#" + textareaID).value = "\\(" + latex + "\\)";
+
+		this.vme_floater.add_button("ok", function() {
+			if (this.vme_callback !== undefined) this.vme_callback("\\(" + vme_frame.contentWindow.vme.codeMirrorEditor.getValue() + "\\)");
+			this.vme_floater.hide();
 		}.bind(this));
-		f.add_button("cancel", function() { f.remove(); }.bind(this));
-    }.bind(this);
+
+		this.vme_floater.add_button("cancel", this.vme_floater.hide);
+
+		this.vme_floater.hide();
+	}.bind(this))();
+
+	//	block
+	this.add_exercise = function() {
+		var el = build("div", "exercise");
+		var el_question_equation = build("div", "question_equation", el);
+		var el_answer_equation = build("div", "answer_equation", el);
+
+		var check_answer = function() {
+			var a = el_question_equation.getAttribute("data-equation");
+			var b = el_answer_equation.getAttribute("data-equation");
+			if (a === null || b === null) return;
+			if (e_math.equals(a, b)) {
+				el.setAttribute("data-correct", "");
+				el.removeAttribute("data-incorrect");
+			} else {
+				el.setAttribute("data-incorrect", "");
+				el.removeAttribute("data-correct");
+			}
+		}.bind(this);
+
+
+		el_question_equation.addEventListener("click", function() {
+			var eq = el_question_equation.getAttribute("data-equation") || "";
+			this.show_vme(eq, function(eq){
+				el_question_equation.innerText = eq; 
+				el_question_equation.setAttribute("data-equation", eq);
+				MathJax.Hub.Typeset(); 
+				check_answer();
+			}.bind(this));
+		}.bind(this));
+
+		
+		el_answer_equation.addEventListener("click", function() {
+			var eq = el_answer_equation.getAttribute("data-equation") || "";
+			this.show_vme(eq, function(eq){
+				el_answer_equation.innerText = eq; 
+				el_answer_equation.setAttribute("data-equation", eq);
+				MathJax.Hub.Typeset(); 
+				check_answer();
+			}.bind(this));
+		}.bind(this));
+
+		this.el_exercises.appendChild(el);
+		return el;
+
+	}.bind(this);
+
 
 
 	this.build_viewer = function() {
-		this.el.style.display = "flex";
-		this.el.style.padding = "5px";
-		this.el.style.margin = "300px";
-
-		var inp1 = build("textarea", undefined, this.el);
-		var eq = build("div", undefined, this.el, "=");
-		var inp2 = build("textarea", undefined, this.el);
-		var butt = build("button", undefined, this.el, "Check");
-
-		butt.addEventListener("click", function() {
-			var dat1 = inp1.value;
-			var dat2 = inp2.value;
-
-			var equals = false;
-			try {
-				var equals = e_math.equals(dat1, dat2);
-			} catch(ex) {}
-
-			if (equals) {
-				this.el.style.backgroundColor = "rgba(0,255,0,0.3)";
-			} else {
-				this.el.style.backgroundColor = "rgba(255,0,0,0.3)";
-			}
-		}.bind(this));
-
-		var reset_func = function() {
-			this.el.style.backgroundColor = "rgba(0,0,0,0)";
-		}.bind(this);
-		inp1.addEventListener("click", reset_func);
-		inp2.addEventListener("click", reset_func);
 
 
-
-		inp1.id = "inp1";
-		inp1.addEventListener("click", function() {
-			this.openEditor("inp1");
-		}.bind(this));
-
-		inp2.id = "inp2";
-		inp2.addEventListener("click", function() {
-			this.openEditor("inp2");
-		}.bind(this));
-
+		var el_add = build("button", undefined, this.el, "Add");
+		el_add.addEventListener("click", this.add_exercise);
+		this.add_exercise();
 	}.bind(this);
 
 	if (this.mode == "editor") {
