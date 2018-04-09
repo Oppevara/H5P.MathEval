@@ -14,6 +14,7 @@ H5P.MathEval = (function ($) {
 
     this.applet = new math_eval_wrapper("viewer");
     $container.append(this.applet.el);
+    if (this.data === undefined) return;
     this.applet.data = this.data.data;
     
   };

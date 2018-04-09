@@ -33,6 +33,12 @@
 	            segment = segment.replace(/\\+$/, "");
 	            segment = segment.replace("\\div", "/");
 	            segment = segment.replace("\\times", "*");
+	            segment = segment.replace("\\lt", "<");
+	            segment = segment.replace("\\gt", ">");
+	            segment = segment.replace("\\leq", "<=");
+	            segment = segment.replace("\\geq", ">=");
+	           	segment = segment.replace("\\neq", "!=");
+
 	            segment = segment.replace(/([^=])[=]([^=])/, "$1==$2");
 	            segment = segment.toLowerCase();
 	            str = str.substring(0, i) + segment;

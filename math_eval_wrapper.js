@@ -367,7 +367,7 @@ function math_eval_wrapper(mode) {
 		'set' : function(v) {
 			this._data = v;
 			this.clear();
-
+			console.log(v);
 			if (v === undefined && this.mode == "editor") {
 				this.add_exercise();
 				return;
