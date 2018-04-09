@@ -33,6 +33,7 @@
 	            segment = segment.replace(/\\+$/, "");
 	            segment = segment.replace("\\div", "/");
 	            segment = segment.replace("\\times", "*");
+	            segment = segment.replace(/([^=])[=]([^=])/, "$1==$2");
 	            segment = segment.toLowerCase();
 	            str = str.substring(0, i) + segment;
 			}
@@ -126,21 +127,7 @@
 	};
 
 	window.e_math = new e_math_proto();
-
 })();
-
-
-//console.log(e_math.equals("x ^ 2 - 4", "(x - 2) * (x + 2)"));
-
-//console.log(e_math.eval("2 + 2"));
-
-//console.log(e_math.equals("(a / 3 + b) ", "((a + a + a) / 9 + b)"));
-
-//console.log(e_math.eval("(a / 3 + b)!", {"a":100, "b": 100}));
-
-//console.log(e_math.eval("\\(1 + 2 \\div 3 + sin(3)\\)"));
-
-//console.log(e_math.eval("\\(5*\\frac{\\pi}{2} + \\cos (30) == 8.008233083862066\\)"));
 
 
 

@@ -1,4 +1,4 @@
-var port_eval = (function(){
+(function(){
 
 	//	instruction
 	var INUMBER = 'INUMBER';
@@ -1465,9 +1465,7 @@ var port_eval = (function(){
 
 	window.port_eval = {"Parser" : Parser};
 
-});
-
-port_eval();
+})();
 
 
 

@@ -10,6 +10,7 @@
     { "machineName" : "H5P.KarliLibrary", "majorVersion" : 1, "minorVersion" : 0 }
   ],
   "preloadedJs": [
+    { "path": "brute.js" },
     { "path": "port_eval.js" },
     { "path": "e_math.js" },
     { "path": "math_eval_wrapper.js" },

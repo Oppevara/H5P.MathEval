@@ -11,11 +11,10 @@ H5P.MathEval = (function ($) {
  
   C.prototype.attach = function ($container) {
 
+
     this.applet = new math_eval_wrapper("viewer");
     $container.append(this.applet.el);
-    try {
-      this.applet.data = this.data.data;
-    } catch(ex) {}
+    this.applet.data = this.data.data;
     
   };
  

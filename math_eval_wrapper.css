@@ -1,27 +1,116 @@
 .math_eval_wrapper {
-	min-width:1000px;
+}
+
+.math_eval_wrapper .exercise_editor {
 	min-height:800px;
 }
 
-.math_eval_wrapper .exercise {
-	width:650px;
+
+
+
+.equation_box {
 	display:flex;
-	padding:5px;
-}
+	align-items:center;
+	justify-content:center;
 
-.math_eval_wrapper .exercise[data-correct] {
-	background-color:rgba(0, 255, 0, 0.5);
-}
+	min-width:60px;
+	min-height:22px;
 
-.math_eval_wrapper .exercise[data-incorrect] {
-	background-color:rgba(255,0,0,0.5);
-}
-
-.question_equation, .answer_equation {
-	width:300px;
-	height:200px;
 	background-color:white;
-	margin:20px;
+	padding:5px;
 	cursor:pointer;
 	box-shadow:0px 0px 3px 0px rgba(0,0,0,0.3);
+	border-radius:8px;
+}
+
+.equation_box:empty:before {
+	content:"edit";
+	color:rgba(0,0,0,0.5);
+}
+
+.sublabel {
+	display:block;
+}
+
+.exercise_editor .rules .rule {
+	display:flex;
+	align-items:center;
+	margin-bottom:10px;
+}
+
+.exercise_editor .rules .rule > * {
+	margin-right:5px;
+}
+
+.exercise_editor .rules .rule .inner {
+	display:flex;
+	align-items:center;
+}
+
+.exercise_editor .rules .rule .inner > * {
+	margin-right:5px;
+}
+
+.exercise_editor .rules .rule .rowtext {
+	text-align:center;
+	width:80px;
+	color:rgba(0,0,0,0.5);
+	font-size:80%;
+	padding-top:5px;
+}
+
+
+.exercise_editor .rules .rule input {
+	width:60px;
+	font-size:20px;
+	padding:5px;
+	text-align:center;
+}
+
+.exercise_editor .hide {
+	display:none;
+}
+
+
+.exercise_editor .vars .var {
+	display:flex;
+	margin-bottom:5px;
+}
+
+.exercise_editor .vars .var > * {
+	margin-left:10px;
+}
+
+.exercise_editor .vars .var input[type="checkbox"] {
+	margin-left:4px;
+}
+
+.exercise_editor .set_scroller {
+	margin-top:20px;
+	max-height:200px;
+	overflow:scroll;
+}
+
+.exercise_viewer {
+	margin:10px;
+}
+
+.exercise_viewer .rule {
+	display:flex;
+}
+
+.exercise_viewer .rule > * {
+	margin:10px;
+}
+
+.exercise_viewer .rule > .equation_box {
+	margin-top:5px;
+}
+
+.exercise_viewer [data-correct] {
+	background-color:rgba(0,255,0,0.5);
+}
+
+.exercise_viewer [data-incorrect] {
+	background-color:rgba(255,0,0,0.5);
 }
